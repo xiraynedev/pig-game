@@ -10,18 +10,11 @@ GAME RULES:
 */
 
 var scores, roundScore, activePlayer, diceImage;
-
-scores = [0, 0];
-roundScore = 0;
-activePlayer = 0;
 diceImage = document.querySelector('.dice');
-
 diceImage.style.display = 'none';
-
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
+resetGame();
+resetPlayerScore();
+resetCurrentScore();
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
     // 1. Generate random number
@@ -36,33 +29,66 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         roundScore += dice;
         document.getElementById('current-' + activePlayer).textContent = roundScore;
     } else {
-        if (activePlayer === 0) {
-            activePlayer = 1;
-        } else {
-            activePlayer = 0
-        }
-        roundScore = 0;
-        document.getElementById('current-0').textContent = 0;
-        document.getElementById('current-1').textContent = 0;
-
-        document.querySelector('.player-0-panel').classList.toggle('active');
-        document.querySelector('.player-1-panel').classList.toggle('active');
-
-        diceImage.style.display = 'none';
+        nextPlayer();
     }
 });
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
     scores[activePlayer] += roundScore;
     document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
-    document.getElementById('current-0').textContent = 0;
-    document.getElementById('current-1').textContent = 0;
+    resetCurrentScore();
+
+    nextPlayer();
+});
+
+function nextPlayer() {
+    if(scores[activePlayer] >= 100) {
+        debugger;
+        if (activePlayer === 0) {
+            alert('Player 1 has won the game!');
+        } else {
+            alert('Player 2 has won the game!');
+        }
+       resetGame();
+       resetCurrentScore();
+       resetPlayerScore();
+       return;
+    }
+    
     if (activePlayer === 0) {
         activePlayer = 1;
     } else {
         activePlayer = 0
     }
     roundScore = 0;
+    resetCurrentScore();
+
+    toggleActiveClass();
+
+    diceImage.style.display = 'none';
+}
+
+function resetCurrentScore() {
+    document.getElementById('current-0').textContent = 0;
+    document.getElementById('current-1').textContent = 0;
+}
+
+function resetPlayerScore() {
+    document.getElementById('score-0').textContent = '0';
+    document.getElementById('score-1').textContent = '0';
+}
+
+function resetGame() {
+    scores = [0, 0];
+    roundScore = 0;
+    activePlayer = 0;
+    diceImage.style.display = 'none';
+    document.querySelector('.player-0-panel').classList.add('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+}
+
+function toggleActiveClass() {
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
-});
+}
+
