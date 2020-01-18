@@ -41,17 +41,19 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
     nextPlayer();
 });
 
+document.querySelector('.btn-new').addEventListener('click', function() {
+    resetPlayerScore();
+    resetCurrentScore();
+    resetGame();
+});
+
 function nextPlayer() {
-    if(scores[activePlayer] >= 100) {
-        debugger;
-        if (activePlayer === 0) {
-            alert('Player 1 has won the game!');
-        } else {
-            alert('Player 2 has won the game!');
-        }
-       resetGame();
-       resetCurrentScore();
-       resetPlayerScore();
+    if(scores[activePlayer] >= 10) {
+       document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+       document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner'); 
+       diceImage.style.display = 'none';
+       document.querySelector('.btn-roll').style.display = 'none';
+       document.querySelector('.btn-hold').style.display = 'none';
        return;
     }
     
@@ -85,6 +87,13 @@ function resetGame() {
     diceImage.style.display = 'none';
     document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+    document.querySelector('#name-0').textContent = 'Player 1';
+    document.querySelector('#name-1').textContent = 'Player 2';
+    document.querySelector('.btn-roll').style.display = 'block';
+    document.querySelector('.btn-hold').style.display = 'block';
+
 }
 
 function toggleActiveClass() {
