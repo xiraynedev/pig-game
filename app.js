@@ -51,4 +51,6 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         diceImage.style.display = 'none';
 
     }
+
+    // continue with game
 });
