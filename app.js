@@ -10,6 +10,7 @@ GAME RULES:
 */
 //debugger;
 var scores,
+  finalScore,
   roundScore,
   activePlayer,
   diceImage1,
@@ -29,7 +30,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     // 1. Generate random number
     var dice1 = Math.floor(Math.random() * 6 + 1);
     var dice2 = Math.floor(Math.random() * 6 + 1);
- 
+
     // 2. Display the result
     diceImage1.style.display = "block";
     diceImage1.src = "dice-" + dice1 + ".png";
@@ -41,7 +42,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     // 3. Compare previous roll to current roll
     if (dice1 === 6 && dice2 === 6) {
       scores[activePlayer] = 0;
-      document.getElementById('score-' + activePlayer).textContent = 0;
+      document.getElementById("score-" + activePlayer).textContent = 0;
       nextPlayer(dice1, dice2);
     } else if (dice1 !== 1 && dice2 !== 1) {
       roundScore += dice1 + dice2;
@@ -73,7 +74,7 @@ document.querySelector(".btn-new").addEventListener("click", function() {
 });
 
 function nextPlayer(dice1 = 0, dice2 = 0) {
-  if (scores[activePlayer] >= 50) {
+  if (scores[activePlayer] >= finalScore) {
     document.querySelector("#name-" + activePlayer).textContent = "Winner!";
     document
       .querySelector(".player-" + activePlayer + "-panel")
@@ -103,20 +104,20 @@ function nextPlayer(dice1 = 0, dice2 = 0) {
     }, 500);
   } else if (dice1 === 6 && dice2 === 6) {
     document.getElementById("name-" + activePlayer).textContent =
-    "You rolled two sixes!";
-  var nameChange = setInterval(() => {
-    if (timer === 2) {
-      if (activePlayer === 0) {
-        document.getElementById("name-1").textContent = "Player 2";
-      } else if (activePlayer === 1) {
-        document.getElementById("name-0").textContent = "Player 1";
-      }
+      "You rolled two sixes!";
+    var nameChange = setInterval(() => {
+      if (timer === 2) {
+        if (activePlayer === 0) {
+          document.getElementById("name-1").textContent = "Player 2";
+        } else if (activePlayer === 1) {
+          document.getElementById("name-0").textContent = "Player 1";
+        }
 
-      clearInterval(nameChange);
-      timer = 0;
-    }
-    timer++;
-  }, 500);
+        clearInterval(nameChange);
+        timer = 0;
+      }
+      timer++;
+    }, 500);
   }
 
   if (activePlayer === 0) {
@@ -146,12 +147,14 @@ function resetPlayerScore() {
 function resetGame() {
   gamePlaying = true;
   scores = [0, 0];
+  finalScore = 50;
   roundScore = 0;
   activePlayer = 0;
   diceImage1.style.display = "none";
   diceImage2.style.display = "none";
   previousRoll = null;
   timer = 0;
+  document.querySelector("#form-input").classList.remove("hide-form");
   document.querySelector(".player-0-panel").classList.add("active");
   document.querySelector(".player-1-panel").classList.remove("active");
   document.querySelector(".player-0-panel").classList.remove("winner");
@@ -168,3 +171,11 @@ function toggleActiveClass() {
   document.querySelector(".player-0-panel").classList.toggle("active");
   document.querySelector(".player-1-panel").classList.toggle("active");
 }
+
+const form = document.querySelector("#form-input");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  finalScore = e.target.input.value;
+  form.reset();
+  form.classList.add("hide-form");
+});
