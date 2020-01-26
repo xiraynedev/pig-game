@@ -15,7 +15,6 @@ var scores,
   diceImage1,
   diceImage2,
   gamePlaying,
-  previousRoll,
   timer;
 diceImage1 = document.querySelector(".dice1");
 diceImage1.style.display = "none";
@@ -30,7 +29,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     // 1. Generate random number
     var dice1 = Math.floor(Math.random() * 6 + 1);
     var dice2 = Math.floor(Math.random() * 6 + 1);
-
+ 
     // 2. Display the result
     diceImage1.style.display = "block";
     diceImage1.src = "dice-" + dice1 + ".png";
@@ -40,8 +39,10 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
 
     // 4. Update round score IF the rolled number was NOT a 1
     // 3. Compare previous roll to current roll
-    if (previousRoll === 6 && dice1 === 6) {
-      nextPlayer();
+    if (dice1 === 6 && dice2 === 6) {
+      scores[activePlayer] = 0;
+      document.getElementById('score-' + activePlayer).textContent = 0;
+      nextPlayer(dice1, dice2);
     } else if (dice1 !== 1 && dice2 !== 1) {
       roundScore += dice1 + dice2;
       previousRoll = dice1 + dice2;
@@ -100,6 +101,22 @@ function nextPlayer(dice1 = 0, dice2 = 0) {
       }
       timer++;
     }, 500);
+  } else if (dice1 === 6 && dice2 === 6) {
+    document.getElementById("name-" + activePlayer).textContent =
+    "You rolled two sixes!";
+  var nameChange = setInterval(() => {
+    if (timer === 2) {
+      if (activePlayer === 0) {
+        document.getElementById("name-1").textContent = "Player 2";
+      } else if (activePlayer === 1) {
+        document.getElementById("name-0").textContent = "Player 1";
+      }
+
+      clearInterval(nameChange);
+      timer = 0;
+    }
+    timer++;
+  }, 500);
   }
 
   if (activePlayer === 0) {
