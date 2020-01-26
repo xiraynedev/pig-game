@@ -49,7 +49,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
         "current-" + activePlayer
       ).textContent = roundScore;
     } else {
-      nextPlayer();
+      nextPlayer(dice1, dice2);
     }
   }
 });
@@ -71,8 +71,8 @@ document.querySelector(".btn-new").addEventListener("click", function() {
   resetGame();
 });
 
-function nextPlayer() {
-  if (scores[activePlayer] >= 10) {
+function nextPlayer(dice1 = 0, dice2 = 0) {
+  if (scores[activePlayer] >= 50) {
     document.querySelector("#name-" + activePlayer).textContent = "Winner!";
     document
       .querySelector(".player-" + activePlayer + "-panel")
@@ -84,7 +84,7 @@ function nextPlayer() {
     return;
   }
 
-  if (gamePlaying) {
+  if (dice1 === 1 || dice2 === 1) {
     document.getElementById("name-" + activePlayer).textContent =
       "You rolled a one!";
     var nameChange = setInterval(() => {
